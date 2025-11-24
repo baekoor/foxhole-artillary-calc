@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foxhole Artillery Calculator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+        height:100%;
+        width:100%;
+        margin:0;
+        padding:0;
+    }
+    #instructions {
+        -moz-animation: cssHideInstructions 0s ease-in 25s forwards;
+        -webkit-animation: cssHideInstructions 0s ease-in 25s forwards;
+        -o-animation: cssHideInstructions 0s ease-in 25s forwards;
+        animation: cssHideInstructions 0s ease-in 25s forwards;
+        -webkit-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes cssHideInstructions {
+        to {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
+    @-webkit-keyframes cssHideInstructions {
+        to {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: rgba(0, 0, 0, 0.85);
+      color: #ffffff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Title Bar */
+    .titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: rgba(20, 20, 20, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      -webkit-app-region: drag;
+    }
+
+    .titlebar-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e0e0e0;
+    }
+
+    .titlebar-buttons {
+      display: flex;
+      gap: 8px;
+      -webkit-app-region: no-drag;
+    }
+
+    .titlebar-btn {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+
+    .titlebar-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .titlebar-btn.close:hover {
+      background: rgba(220, 53, 69, 0.8);
+    }
+
+    /* Toolbar */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: rgba(30, 30, 30, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .toolbar-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #b0b0b0;
+    }
+
+    .toolbar select {
+      padding: 5px 8px;
+      background: rgba(50, 50, 50, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      color: #ffffff;
+      font-size: 12px;
+      outline: none;
+      min-width: 180px;
+      cursor: pointer;
+    }
+
+    .toolbar select:focus {
+      border-color: rgba(100, 150, 255, 0.6);
+    }
+
+    .mode-buttons {
+      display: flex;
+      gap: 4px;
+      margin-left: 20px;
+    }
+
+    .mode-btn {
+      padding: 5px 12px;
+      background: rgba(60, 60, 60, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mode-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .mode-btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .mode-btn img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .mode-btn:hover {
+      background: rgba(80, 80, 80, 1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .mode-btn:hover img {
+      transform: scale(1.15);
+    }
+
+    .mode-btn.active {
+      background: rgba(60, 120, 200, 0.9);
+      border-color: rgba(100, 150, 255, 0.6);
+      box-shadow: 0 0 20px rgba(100, 150, 255, 0.4);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .mode-btn.artillery.active {
+      background: rgba(52, 152, 219, 0.9);
+      box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+    }
+
+    .mode-btn.target.active {
+      background: rgba(231, 76, 60, 0.9);
+      box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(100, 150, 255, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(100, 150, 255, 0.8);
+      }
+    }
+
+    .clear-btn {
+      padding: 5px 12px;
+      background: rgba(200, 60, 60, 0.9);
+      border: none;
+      border-radius: 4px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-left: auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .clear-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .clear-btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .clear-btn:hover {
+      background: rgba(220, 80, 80, 1);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(220, 80, 80, 0.5);
+    }
+
+    .toolbar .hotkey-hint {
+      font-size: 11px;
+      color: #808080;
+      font-style: italic;
+      margin-left: 10px;
+    }
+
+    /* Content Area */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      background: #1a1a1a;
+    }
+
+    #mapContainer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: crosshair;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    #mapImage {
+      max-width: 100%;
+      max-height: 100%;
+      display: none;
+      cursor: crosshair;
+    }
+
+    #placeholderText {
+      color: #666;
+      font-size: 16px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Markers */
+    .marker {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      display: none;
+      pointer-events: none;
+      z-index: 10;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      animation: markerAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes markerAppear {
+      0% {
+        transform: translate(-50%, -50%) scale(0) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.3) rotate(180deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1) rotate(360deg);
+        opacity: 1;
+      }
+    }
+
+    .marker.artillery {
+      background: #3498db;
+      border-color: #fff;
+      animation: markerAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+                 artilleryPulse 2s ease-in-out infinite 0.5s;
+    }
+
+    .marker.target {
+      background: #e74c3c;
+      border-color: #fff;
+      animation: markerAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+                 targetPulse 2s ease-in-out infinite 0.5s;
+    }
+
+    @keyframes artilleryPulse {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(52, 152, 219, 0.5), 0 0 20px rgba(52, 152, 219, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(52, 152, 219, 0.8), 0 0 40px rgba(52, 152, 219, 0.5);
+      }
+    }
+
+    @keyframes targetPulse {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(231, 76, 60, 0.5), 0 0 20px rgba(231, 76, 60, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(231, 76, 60, 0.8), 0 0 40px rgba(231, 76, 60, 0.5);
+      }
+    }
+
+    .marker-label {
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.95);
+      padding: 3px 8px;
+      border-radius: 3px;
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      opacity: 0;
+      animation: labelFadeIn 0.3s ease-out 0.3s forwards;
+    }
+
+    @keyframes labelFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .marker.artillery .marker-label {
+      color: #3498db;
+    }
+
+    .marker.target .marker-label {
+      color: #e74c3c;
+    }
+
+    #lineOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      display: none;
+      z-index: 5;
+      opacity: 0;
+      animation: lineAppear 0.5s ease-out forwards;
+    }
+
+    @keyframes lineAppear {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    #distanceLine {
+      stroke-dasharray: 8, 4;
+      stroke-dashoffset: 1000;
+      animation: lineDraw 1s ease-out forwards;
+    }
+
+    @keyframes lineDraw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* Results Panel */
+    #resultsPanel {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.95);
+      border: 1px solid rgba(46, 204, 113, 0.4);
+      border-radius: 6px;
+      padding: 14px;
+      display: none;
+      min-width: 200px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 20px rgba(46, 204, 113, 0.2);
+      opacity: 0;
+      transform: translateX(20px);
+      animation: panelSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+    }
+
+    @keyframes panelSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    #resultsPanel .title {
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #2ecc71;
+      border-bottom: 1px solid rgba(46, 204, 113, 0.3);
+      padding-bottom: 6px;
+      text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+    }
+
+    #resultsPanel .result-row {
+      font-size: 12px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      opacity: 0;
+      animation: rowFadeIn 0.3s ease-out forwards;
+    }
+
+    #resultsPanel .result-row:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+
+    #resultsPanel .result-row:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes rowFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    #resultsPanel .result-label {
+      color: #aaa;
+    }
+
+    #resultsPanel .result-value {
+      color: #fff;
+      font-weight: bold;
+      margin-left: 16px;
+      font-size: 14px;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Instructions */
+    .instructions {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 11px;
+      color: #ccc;
+      max-width: 300px;
+    }
+
+    .instructions .step {
+      margin-bottom: 4px;
+    }
+
+    .instructions .step strong {
+      color: #3498db;
+    }
+  </style>
+</head>
+<body>
+  <!-- Title Bar -->
+  <div class="titlebar">
+    <div class="titlebar-title">Foxhole Artillery Calculator</div>
+    <div class="titlebar-buttons">
+      <button class="titlebar-btn" id="minimizeBtn" title="Minimize">_</button>
+      <button class="titlebar-btn close" id="closeBtn" title="Close (F10 to toggle)">&times;</button>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <label class="toolbar-label" for="mapSelect">Map:</label>
+    <select id="mapSelect">
+      <option value="">-- Select Map --</option>
+      <option value="acrithia">Acrithia</option>
+      <option value="allods_bight">Allod's Bight</option>
+      <option value="ash_fields">Ash Fields</option>
+      <option value="basin_sionnach">Basin Sionnach</option>
+      <option value="callahans_passage">Callahan's Passage</option>
+      <option value="callums_cape">Callum's Cape</option>
+      <option value="clahstra">Clahstra</option>
+      <option value="clanshead_valley">Clanshead Valley</option>
+      <option value="deadlands">Deadlands</option>
+      <option value="drowned_vale">Drowned Vale</option>
+      <option value="endless_shore">Endless Shore</option>
+      <option value="farranac_coast">Farranac Coast</option>
+      <option value="fishermans_row">Fisherman's Row</option>
+      <option value="godcrofts">Godcrofts</option>
+      <option value="great_march">Great March</option>
+      <option value="heartlands">Heartlands</option>
+      <option value="howl_county">Howl County</option>
+      <option value="kalokai">Kalokai</option>
+      <option value="kings_cage">King's Cage</option>
+      <option value="linn_of_mercy">Linn of Mercy</option>
+      <option value="loch_mor">Loch Mor</option>
+      <option value="marban_hollow">Marban Hollow</option>
+      <option value="mooring_county">Mooring County</option>
+      <option value="morgens_crossing">Morgen's Crossing</option>
+      <option value="nevish_line">Nevish Line</option>
+      <option value="oarbreaker">Oarbreaker</option>
+      <option value="origin">Origin</option>
+      <option value="reaching_trail">Reaching Trail</option>
+      <option value="reavers_pass">Reaver's Pass</option>
+      <option value="red_river">Red River</option>
+      <option value="sableport">Sableport</option>
+      <option value="shackled_chasm">Shackled Chasm</option>
+      <option value="speaking_woods">Speaking Woods</option>
+      <option value="stema_landing">Stema Landing</option>
+      <option value="stonecradle">Stonecradle</option>
+      <option value="tempest_island">Tempest Island</option>
+      <option value="terminus">Terminus</option>
+      <option value="the_fingers">The Fingers</option>
+      <option value="umbral_wildwood">Umbral Wildwood</option>
+      <option value="viper_pit">Viper Pit</option>
+      <option value="weathered_expanse">Weathered Expanse</option>
+      <option value="westgate">Westgate</option>
+    </select>
+
+    <div class="mode-buttons">
+      <button class="mode-btn artillery active" id="artilleryModeBtn">
+        <img src="../assets/cannon.png" alt="Artillery">
+        Set Artillery
+      </button>
+      <button class="mode-btn target" id="targetModeBtn">
+        <img src="../assets/target.png" alt="Target">
+        Set Target
+      </button>
+    </div>
+
+    <button id="clearBtn" class="clear-btn">Clear All</button>
+
+    <span class="hotkey-hint">F10 to toggle</span>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content">
+    <div id="mapContainer">
+      <img id="mapImage" alt="Map" />
+      <div id="placeholderText">
+        <strong>Select a map to begin</strong><br><br>
+        1. Choose a map from the dropdown<br>
+        2. Click to set artillery position<br>
+        3. Click to set target position<br>
+        4. View distance & azimuth
+      </div>
+
+      <!-- Artillery marker -->
+      <div id="artilleryMarker" class="marker artillery">
+        <div class="marker-label">ARTILLERY</div>
+      </div>
+
+      <!-- Target marker -->
+      <div id="targetMarker" class="marker target">
+        <div class="marker-label">TARGET</div>
+      </div>
+
+      <!-- Line between markers -->
+      <svg id="lineOverlay">
+        <line id="distanceLine" stroke="#2ecc71" stroke-width="3" stroke-dasharray="8,4" />
+      </svg>
+
+      <!-- Results panel -->
+      <div id="resultsPanel">
+        <div class="title">Artillery Solution</div>
+        <div class="result-row">
+          <span class="result-label">Distance:</span>
+          <span class="result-value" id="distanceValue">-</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Azimuth:</span>
+          <span class="result-value" id="azimuthValue">-</span>
+        </div>
+      </div>
+
+      <!-- Instructions -->
+      <div class="instructions" id="instructions">
+        <div class="step"><strong>Step 1:</strong> Click "Set Artillery" and click on the map</div>
+        <div class="step"><strong>Step 2:</strong> Click "Set Target" and click on the map</div>
+        <div class="step"><strong>Tip:</strong> Results update automatically!</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="overlay.js?v=2"></script>
+</body>
+</html>

@@ -6,7 +6,7 @@
 const { default: psList } = require('ps-list');
 
 (async () => {
-  console.log('🔍 Searching for Foxhole...\n');
+  console.log('[SEARCH] Searching for Foxhole...\n');
 
   const processes = await psList();
   console.log(`Scanning ${processes.length} processes...\n`);
@@ -24,7 +24,7 @@ const { default: psList } = require('ps-list');
   });
 
   if (candidates.length > 0) {
-    console.log('✅ Found potential Foxhole process(es):\n');
+    console.log('[OK] Found potential Foxhole process(es):\n');
     candidates.forEach(p => {
       console.log(`Process Name: "${p.name}"`);
       console.log(`PID: ${p.pid}`);
@@ -32,7 +32,7 @@ const { default: psList } = require('ps-list');
       console.log('---');
     });
   } else {
-    console.log('❌ No Foxhole-related processes found.\n');
+    console.log('[ERROR] No Foxhole-related processes found.\n');
     console.log('Please make sure:');
     console.log('1. Foxhole is launched from Steam');
     console.log('2. You are in the game (not just launcher)');
@@ -40,5 +40,5 @@ const { default: psList } = require('ps-list');
     console.log('Then run this script again.');
   }
 
-  console.log('\n💡 Tip: Run "node find-foxhole.js" while in-game to see the exact process name.');
+  console.log('\n[TIP] Run "node find-foxhole.js" while in-game to see the exact process name.');
 })();

@@ -2,7 +2,7 @@
 
 This document outlines the manual testing scenarios to verify the Foxhole Overlay application works correctly.
 
-## Safety Verification ✅
+## Safety Verification 
 
 Before any functional testing, verify the codebase contains NO:
 - [ ] `OpenProcess`, `ReadProcessMemory`, `WriteProcessMemory` calls

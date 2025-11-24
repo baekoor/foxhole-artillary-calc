@@ -13,7 +13,7 @@
 
 ---
 
-## ⚙️ First-Time Setup (2 Minutes)
+##  First-Time Setup (2 Minutes)
 
 ### Step 1: Find the Tray Icon
 - After launching, look for the overlay icon in your **system tray** (bottom-right, near the clock)
@@ -22,7 +22,7 @@
 ### Step 2: Enable Auto-Start (Recommended)
 - **Right-click** the tray icon
 - Click **"Start with Windows"**
-- ✅ Now the overlay launches automatically when Windows boots!
+-  Now the overlay launches automatically when Windows boots!
 
 ### Step 3: Configure Your Calculator
 - Right-click tray icon → **"Show Overlay"**
@@ -48,7 +48,7 @@
 
 ---
 
-## ⌨️ Hotkeys
+##  Hotkeys
 
 | Key | Action |
 |-----|--------|
@@ -64,7 +64,7 @@
 
 - **Show Overlay** - Opens the overlay window
 - **Hide Overlay** - Hides the overlay window
-- **Start with Windows** ✅ - Auto-launch at boot (recommended!)
+- **Start with Windows**  - Auto-launch at boot (recommended!)
 - **Quit** - Exit the application
 
 ---
@@ -72,9 +72,9 @@
 ## 💡 Tips & Tricks
 
 ### Recommended Setup
-1. ✅ Enable "Start with Windows"
-2. ✅ Let it run 24/7 in the tray
-3. ✅ Just press F10 whenever you need it in-game
+1.  Enable "Start with Windows"
+2.  Let it run 24/7 in the tray
+3.  Just press F10 whenever you need it in-game
 
 ### Multi-Monitor Support
 - The overlay works on any monitor
@@ -87,7 +87,7 @@
 
 ---
 
-## ❓ Common Questions
+##  Common Questions
 
 **Q: Does this violate anti-cheat?**
 A: No! The overlay is 100% external. It only displays a website on top of your game. It does NOT:
@@ -117,13 +117,13 @@ A: Currently F10 is hardcoded, but you can modify `src/configStore.ts` and rebui
 
 This overlay is **completely safe** and transparent:
 
-✅ **Only monitors** process names (to detect Foxhole)
-✅ **Only uses** standard Windows hotkeys
-✅ **Only displays** a web page on top of the game
+ **Only monitors** process names (to detect Foxhole)
+ **Only uses** standard Windows hotkeys
+ **Only displays** a web page on top of the game
 
-❌ **Never touches** game files
-❌ **Never reads** game memory
-❌ **Never injects** anything
+ **Never touches** game files
+ **Never reads** game memory
+ **Never injects** anything
 
 The entire source code is available for inspection.
 

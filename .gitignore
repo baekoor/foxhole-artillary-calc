@@ -57,6 +57,7 @@ yarn.lock
 tmp/
 temp/
 *.tmp
+nul
 
 # Coverage directory
 coverage/

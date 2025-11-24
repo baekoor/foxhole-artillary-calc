@@ -5,17 +5,17 @@ An always-on-top overlay application for Foxhole that displays an artillery calc
 ## Safety Guarantee
 
 This application is **100% safe** and does **NOT**:
-- ❌ Read or write Foxhole's process memory
-- ❌ Inject DLLs or hooks into Foxhole
-- ❌ Hook DirectX, Vulkan, or any graphics API
-- ❌ Simulate mouse/keyboard input into the game
-- ❌ Violate any anti-cheat policies
+- Read or write Foxhole's process memory
+- Inject DLLs or hooks into Foxhole
+- Hook DirectX, Vulkan, or any graphics API
+- Simulate mouse/keyboard input into the game
+- Violate any anti-cheat policies
 
 It **ONLY**:
-- ✅ Monitors the process list for "Foxhole.exe"
-- ✅ Registers a global hotkey (F10) when Foxhole is running
-- ✅ Displays a transparent overlay window on top of the game
-- ✅ Embeds a web-based artillery calculator in an iframe
+- Monitors the process list for "Foxhole.exe"
+- Registers a global hotkey (F10) when Foxhole is running
+- Displays a transparent overlay window on top of the game
+- Embeds a web-based artillery calculator in an iframe
 
 ## Features
 

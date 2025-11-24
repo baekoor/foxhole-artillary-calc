@@ -58,11 +58,11 @@
 5. **Press F10** to hide it when done
 
 ### The overlay will:
-- ✅ Automatically detect when Foxhole starts
-- ✅ Enable the F10 hotkey only when Foxhole is running
-- ✅ Appear on top of the game window
-- ✅ Remember your last sector and settings
-- ✅ Automatically disable when you exit Foxhole
+-  Automatically detect when Foxhole starts
+-  Enable the F10 hotkey only when Foxhole is running
+-  Appear on top of the game window
+-  Remember your last sector and settings
+-  Automatically disable when you exit Foxhole
 
 ## Tips
 

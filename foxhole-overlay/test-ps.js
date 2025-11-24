@@ -12,7 +12,7 @@ const { default: psList } = require('ps-list');
   );
 
   if (foxhole.length > 0) {
-    console.log('✅ FOUND Foxhole processes:');
+    console.log('[OK] FOUND Foxhole processes:');
     foxhole.forEach(p => {
       console.log(`  - Name: "${p.name}"`);
       console.log(`    PID: ${p.pid}`);
@@ -20,7 +20,7 @@ const { default: psList } = require('ps-list');
     });
     console.log('The overlay should detect this and enable F10 hotkey!');
   } else {
-    console.log('❌ No Foxhole processes found.');
+    console.log('[ERROR] No Foxhole processes found.');
     console.log('\nMake sure Foxhole is running from Steam.');
   }
 })();
